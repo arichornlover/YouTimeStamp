@@ -17,6 +17,19 @@
 - (void)didPressYouTimeStamp:(id)arg;
 @end
 
+NSBundle *YouTimeStampBundle() {
+    static NSBundle *bundle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *tweakBundlePath = [[NSBundle mainBundle] pathForResource:TweakKey ofType:@"bundle"];
+        if (tweakBundlePath)
+            bundle = [NSBundle bundleWithPath:tweakBundlePath];
+        else
+            bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:ROOT_PATH_NS(@"/Library/Application Support/%@.bundle"), TweakKey]];
+    });
+    return bundle;
+}
+
 %group Top
 
 %hook YTMainAppControlsOverlayView
