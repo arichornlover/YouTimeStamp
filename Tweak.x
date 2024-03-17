@@ -93,12 +93,17 @@ NSBundle *YouTimeStampBundle() {
 
 %new(v@:@)
 - (void)didPressTweak:(id)arg {
-    YTLabel *currentTimeLabel = playerBarView.currentTimeLabel;
-    NSString *timestamp = currentTimeLabel.text;
-
-    NSString *videoShareURL = playerBarView.videoShareURL;
-    videoShareURL = [videoShareURL stringByAppendingFormat:@"?t=%@", timestamp];
-
+    NSString *currentTime = self.currentTimeLabel.text;
+    NSArray *timeComponents = [currentTime componentsSeparatedByString:@":"];
+    
+    if (timeComponents.count == 2) {
+        NSInteger minutes = [timeComponents[0] integerValue];
+        NSInteger seconds = [timeComponents[1] integerValue];
+        
+        NSInteger totalSeconds = (minutes * 60) + seconds;
+        
+        self.delegate.videoShareURL = [NSString stringWithFormat:@"%@?t=%ds", self.delegate.videoShareURL, totalSeconds];
+    }
     [self.timestampButton setImage:<Another Tweak Button Image> forState:0];
 }
 
