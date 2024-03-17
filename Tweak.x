@@ -1,6 +1,8 @@
 #import "../YTVideoOverlay/Header.h"
 #import "../YTVideoOverlay/Init.x"
 #import <YouTubeHeader/YTMainAppVideoPlayerOverlayViewController.h>
+#import <YouTubeHeader/MLFormat.h>
+#import <YouTubeHeader/YTIFormatStream.h>
 
 #define TweakKey "YouTimeStamp"
 
