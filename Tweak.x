@@ -3,6 +3,7 @@
 #import <YouTubeHeader/YTMainAppVideoPlayerOverlayViewController.h>
 #import <YouTubeHeader/MLFormat.h>
 #import <YouTubeHeader/YTIFormatStream.h>
+#import <YouTubeHeader/YTIShareVideoEndpoint.h>
 
 #define TweakKey "YouTimeStamp"
 
@@ -24,7 +25,7 @@
 
 - (id)initWithDelegate:(id)delegate {
     self = %orig;
-    self.timestampButton = [self createButton:YouTimeStamp accessibilityLabel:@"Copy Timestamp" selector:@selector(didPressYouTimeStamp:)];
+    self.timestampButton = [self createButton:TweakKey accessibilityLabel:@"Copy Timestamp" selector:@selector(didPressYouTimeStamp:)];
     return self;
 }
 
@@ -35,16 +36,21 @@
 }
 
 - (YTQTMButton *)button:(NSString *)tweakId {
-    return [tweakId isEqualToString:YouTimeStamp] ? self.timestampButton : %orig;
+    return [tweakId isEqualToString:TweakKey] ? self.timestampButton : %orig;
 }
 
 - (UIImage *)buttonImage:(NSString *)tweakId {
-    return [tweakId isEqualToString:YouTimeStamp] ? <Your Tweak Button Image> : %orig;
+    return [tweakId isEqualToString:TweakKey] ? <Your Tweak Button Image> : %orig;
 }
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    // Do stuff
+    YTLabel *currentTimeLabel = playerBarView.currentTimeLabel;
+    NSString *timestamp = currentTimeLabel.text;
+
+    NSString *videoShareURL = playerBarView.videoShareURL;
+    videoShareURL = [videoShareURL stringByAppendingFormat:@"?t=%@", timestamp];
+
     [self.timestampButton setImage:<Another Tweak Button Image> forState:0];
 }
 
@@ -60,21 +66,26 @@
 
 - (id)init {
     self = %orig;
-    self.timestampButton = [self createButton:YouTimeStamp accessibilityLabel:@"Copy Timestamp" selector:@selector(didPressYouTimeStamp:)];
+    self.timestampButton = [self createButton:TweakKey accessibilityLabel:@"Copy Timestamp" selector:@selector(didPressYouTimeStamp:)];
     return self;
 }
 
 - (YTQTMButton *)button:(NSString *)tweakId {
-    return [tweakId isEqualToString:YouTimeStamp] ? self.timestampButton : %orig;
+    return [tweakId isEqualToString:TweakKey] ? self.timestampButton : %orig;
 }
 
 - (UIImage *)buttonImage:(NSString *)tweakId {
-    return [tweakId isEqualToString:YouTimeStamp] ? <Your Tweak Button Image> : %orig;
+    return [tweakId isEqualToString:TweakKey] ? <Your Tweak Button Image> : %orig;
 }
 
 %new(v@:@)
 - (void)didPressTweak:(id)arg {
-    // Do stuff
+    YTLabel *currentTimeLabel = playerBarView.currentTimeLabel;
+    NSString *timestamp = currentTimeLabel.text;
+
+    NSString *videoShareURL = playerBarView.videoShareURL;
+    videoShareURL = [videoShareURL stringByAppendingFormat:@"?t=%@", timestamp];
+
     [self.timestampButton setImage:<Another Tweak Button Image> forState:0];
 }
 
