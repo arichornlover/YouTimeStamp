@@ -1,5 +1,6 @@
 #import "../YTVideoOverlay/Header.h"
 #import "../YTVideoOverlay/Init.x"
+#import <YouTubeHeader/YTColor.h>
 #import <YouTubeHeader/YTMainAppVideoPlayerOverlayViewController.h>
 #import <YouTubeHeader/MLFormat.h>
 #import <YouTubeHeader/YTIFormatStream.h>
