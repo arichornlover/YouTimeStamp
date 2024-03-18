@@ -2,7 +2,7 @@
 #import "../YTVideoOverlay/Init.x"
 #import "../YouTubeHeader/YTColor.h"
 #import "../YouTubeHeader/YTMainAppVideoPlayerOverlayViewController.h"
-#import "../YTMainAppControlsOverlayView.h"
+#import "../YouTubeHeader/YTMainAppControlsOverlayView.h"
 #import "../YouTubeHeader/MLFormat.h"
 #import "../YouTubeHeader/YTIFormatStream.h"
 #import "../YouTubeHeader/YTIShareVideoEndpoint.h"
