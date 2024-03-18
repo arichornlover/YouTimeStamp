@@ -2,6 +2,7 @@
 #import "../YTVideoOverlay/Init.x"
 #import "../YouTubeHeader/YTColor.h"
 #import "../YouTubeHeader/YTMainAppVideoPlayerOverlayViewController.h"
+#import "../YTMainAppControlsOverlayView.h"
 #import "../YouTubeHeader/MLFormat.h"
 #import "../YouTubeHeader/YTIFormatStream.h"
 #import "../YouTubeHeader/YTIShareVideoEndpoint.h"
@@ -63,9 +64,9 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = [self currentTimeString];
-    if (currentTime && [self.delegate respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [self.delegate videoShareURL];
+    NSString *currentTime = self.currentTimeLabel.text;
+    if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
+        NSString *videoShareURL = [self videoShareURL];
         [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
@@ -112,9 +113,9 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = [self currentTimeString];
-    if (currentTime && [self.delegate respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [self.delegate videoShareURL];
+    NSString *currentTime = self.currentTimeLabel.text;
+    if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
+        NSString *videoShareURL = [self videoShareURL];
         [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
