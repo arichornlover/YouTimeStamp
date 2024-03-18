@@ -6,7 +6,7 @@
 #import "../YouTubeHeader/YTIFormatStream.h"
 #import "../YouTubeHeader/YTIShareVideoEndpoint.h"
 
-#define TweakKey "YouTimeStamp"
+#define TweakKey @"YouTimeStamp"
 
 @interface YTMainAppControlsOverlayView (YouTimeStamp)
 @property (retain, nonatomic) YTQTMButton *timestampButton;
@@ -29,6 +29,10 @@ NSBundle *YouTimeStampBundle() {
             bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:ROOT_PATH_NS(@"/Library/Application Support/%@.bundle"), TweakKey]];
     });
     return bundle;
+}
+
+static UIImage *timestampImage(NSString *qualityLabel) {
+    return [%c(QTMIcon) tintImage:[UIImage imageNamed:[NSString stringWithFormat:@"Timestamp@%@", qualityLabel] inBundle: YouTimeStampBundle() compatibleWithTraitCollection:nil] color:[%c(YTColor) white1]];
 }
 
 %group Top
@@ -54,7 +58,7 @@ NSBundle *YouTimeStampBundle() {
 }
 
 - (UIImage *)buttonImage:(NSString *)tweakId {
-    return [tweakId isEqualToString:TweakKey] ? <Your Tweak Button Image> : %orig;
+    return [tweakId isEqualToString:TweakKey] ? timestampImage(@"3") : %orig;
 }
 
 %new(v@:@)
@@ -65,7 +69,7 @@ NSBundle *YouTimeStampBundle() {
     NSString *videoShareURL = playerBarView.videoShareURL;
     videoShareURL = [videoShareURL stringByAppendingFormat:@"?t=%@", timestamp];
 
-    [self.timestampButton setImage:<Another Tweak Button Image> forState:0];
+    [self.timestampButton setImage:timestampImage(@"2") forState:0];
 }
 
 %end
@@ -89,23 +93,34 @@ NSBundle *YouTimeStampBundle() {
 }
 
 - (UIImage *)buttonImage:(NSString *)tweakId {
-    return [tweakId isEqualToString:TweakKey] ? <Your Tweak Button Image> : %orig;
+    return [tweakId isEqualToString:TweakKey] ? timestampImage(@"3") : %orig;
 }
 
 %new(v@:@)
 - (void)didPressTweak:(id)arg {
     NSString *currentTime = self.currentTimeLabel.text;
-    NSArray *timeComponents = [currentTime componentsSeparatedByString:@":"];
-    
-    if (timeComponents.count == 2) {
-        NSInteger minutes = [timeComponents[0] integerValue];
-        NSInteger seconds = [timeComponents[1] integerValue];
-        
-        NSInteger totalSeconds = (minutes * 60) + seconds;
-        
-        self.delegate.videoShareURL = [NSString stringWithFormat:@"%@?t=%ds", self.delegate.videoShareURL, totalSeconds];
+    if (currentTime && self.videoShareURL) {
+        [self copyModifiedURLToClipboard:self.videoShareURL withTime:currentTime];
     }
-    [self.timestampButton setImage:<Another Tweak Button Image> forState:0];
+    [self.timestampButton setImage:timestampImage(@"2") forState:0];
+}
+- (NSInteger)timeToSeconds:(NSString *)timeString {
+    NSArray *components = [timeString componentsSeparatedByString:@":"];
+    if (components.count == 2) {
+        NSInteger minutes = [components[0] integerValue];
+        NSInteger seconds = [components[1] integerValue];
+        return (minutes * 60) + seconds;
+    }
+    return 0;
+}
+- (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString {
+    NSInteger seconds = [self timeToSeconds:timeString];
+    NSURL *url = [NSURL URLWithString:[originalURL stringByAppendingFormat:@"?t=%ds", seconds]];
+    
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:url.absoluteString];
+    
+    // you can display a success message or alert about the timestamp here
 }
 
 %end
