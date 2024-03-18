@@ -63,13 +63,29 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    YTLabel *currentTimeLabel = playerBarView.currentTimeLabel;
-    NSString *timestamp = currentTimeLabel.text;
-
-    NSString *videoShareURL = playerBarView.videoShareURL;
-    videoShareURL = [videoShareURL stringByAppendingFormat:@"?t=%@", timestamp];
-
+    NSString *currentTime = self.currentTimeLabel.text;
+    if (currentTime && self.videoShareURL) {
+        [self copyModifiedURLToClipboard:self.videoShareURL withTime:currentTime];
+    }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
+}
+- (NSInteger)timeToSeconds:(NSString *)timeString {
+    NSArray *components = [timeString componentsSeparatedByString:@":"];
+    if (components.count == 2) {
+        NSInteger minutes = [components[0] integerValue];
+        NSInteger seconds = [components[1] integerValue];
+        return (minutes * 60) + seconds;
+    }
+    return 0;
+}
+- (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString {
+    NSInteger seconds = [self timeToSeconds:timeString];
+    NSURL *url = [NSURL URLWithString:[originalURL stringByAppendingFormat:@"?t=%ds", seconds]];
+    
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:url.absoluteString];
+    
+    // you can display a success message or alert about the timestamp here
 }
 
 %end
@@ -97,7 +113,7 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 }
 
 %new(v@:@)
-- (void)didPressTweak:(id)arg {
+- (void)didPressYouTimeStamp:(id)arg {
     NSString *currentTime = self.currentTimeLabel.text;
     if (currentTime && self.videoShareURL) {
         [self copyModifiedURLToClipboard:self.videoShareURL withTime:currentTime];
