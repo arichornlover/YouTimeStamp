@@ -12,12 +12,33 @@
 @interface YTMainAppControlsOverlayView (YouTimeStamp)
 @property (retain, nonatomic) YTQTMButton *timestampButton;
 - (void)didPressYouTimeStamp:(id)arg;
+- (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
+- (NSInteger)timeToSeconds:(NSString *)timeString;
 @end
 
 @interface YTInlinePlayerBarContainerView (YouTimeStamp)
 @property (retain, nonatomic) YTQTMButton *timestampButton;
 - (void)didPressYouTimeStamp:(id)arg;
+- (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
+- (NSInteger)timeToSeconds:(NSString *)timeString;
 @end
+
+// For displaying snackbars - @theRealfoxster
+@interface YTHUDMessage : NSObject
++ (id)messageWithText:(id)text;
+- (void)setAction:(id)action;
+@end
+
+@interface GOOHUDMessageAction : NSObject
+- (void)setTitle:(NSString *)title;
+- (void)setHandler:(void (^)(id))handler;
+@end
+
+@interface GOOHUDManagerInternal : NSObject
+- (void)showMessageMainThread:(id)message;
++ (id)sharedInstance;
+@end
+//
 
 NSBundle *YouTimeStampBundle() {
     static NSBundle *bundle = nil;
@@ -63,11 +84,12 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 }
 
 %new(v@:@)
+%new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = self.currentTimeLabel.text;
-    if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [self videoShareURL];
-        [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
+    NSString *currentTime = [self.delegate currentTimeString];
+    if (currentTime && [self.delegate respondsToSelector:@selector(videoShareURL)]) {
+        NSString *videoShareURL = [self.delegate videoShareURL];
+        [self.delegate copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
 }
@@ -133,7 +155,14 @@ static UIImage *timestampImage(NSString *qualityLabel) {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     [pasteboard setString:url.absoluteString];
     
-    // you can display a success message or alert about the timestamp here
+    id message = [YTHUDMessage messageWithText:@"Successfully copied URL with Timestamp"];
+    
+    id action = [GOOHUDMessageAction new];
+    [action setTitle:@"Dismiss"];
+    [message setAction:action];
+    
+    id hudManager = [GOOHUDManagerInternal sharedInstance];
+    [hudManager showMessageMainThread:message];
 }
 
 %end
