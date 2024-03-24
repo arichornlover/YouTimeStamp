@@ -86,19 +86,20 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = YTInlinePlayerBarContainerView.currentTimeLabel.text;
-    if (currentTime && [self.delegate respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [YTIFormatStream videoShareURL];
-        [self.delegate copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
+    NSString *currentTime = self.currentTimeLabel.text;
+    if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
+        NSString *videoShareURL = self.videoShareURL;
+        [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
 }
 - (NSString *)currentTimeString {
-    if ([self respondsToSelector:@selector(currentTimeLabel)]) {
-        return [YTInlinePlayerBarContainerView currentTimeLabel].text;
+    if (self.currentTimeLabel) {
+        return self.currentTimeLabel.text;
     }
     return nil;
 }
+
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString {
     NSInteger seconds = [self timeToSeconds:timeString];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?t=%lds", originalURL, (long)seconds]];
@@ -144,14 +145,14 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 - (void)didPressYouTimeStamp:(id)arg {
     NSString *currentTime = self.currentTimeLabel.text;
     if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [YTIFormatStream videoShareURL];
+        NSString *videoShareURL = self.videoShareURL;
         [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
 }
 - (NSString *)currentTimeString {
-    if ([self respondsToSelector:@selector(currentTimeLabel)]) {
-        return [self currentTimeLabel].text;
+    if (self.currentTimeLabel) {
+        return self.currentTimeLabel.text;
     }
     return nil;
 }
