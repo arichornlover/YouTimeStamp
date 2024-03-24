@@ -14,6 +14,8 @@
 - (void)didPressYouTimeStamp:(id)arg;
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
 - (NSInteger)timeToSeconds:(NSString *)timeString;
+@property (nonatomic, strong) YTLabel *currentTimeLabel; // YTInlinePlayerBarContainerView
+@property (nonatomic, copy) NSString *videoShareURL; // YTIShareVideoEndpoint
 @end
 
 @interface YTInlinePlayerBarContainerView (YouTimeStamp)
@@ -22,6 +24,8 @@
 - (void)didPressYouTimeStamp:(id)arg;
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
 - (NSInteger)timeToSeconds:(NSString *)timeString;
+@property (nonatomic, strong) YTLabel *currentTimeLabel; // YTInlinePlayerBarContainerView
+@property (nonatomic, copy) NSString *videoShareURL; // YTIShareVideoEndpoint
 @end
 
 // For displaying snackbars - @theRealfoxster
