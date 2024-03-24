@@ -17,6 +17,7 @@
 @end
 
 @interface YTInlinePlayerBarContainerView (YouTimeStamp)
+@property (nonatomic, strong, readwrite) YTLabel *currentTimeLabel;
 @property (retain, nonatomic) YTQTMButton *timestampButton;
 - (void)didPressYouTimeStamp:(id)arg;
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
@@ -84,18 +85,17 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 }
 
 %new(v@:@)
-%new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = [self.delegate currentTimeString];
+    NSString *currentTime = YTInlinePlayerBarContainerView.currentTimeLabel.text;
     if (currentTime && [self.delegate respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [self.delegate videoShareURL];
+        NSString *videoShareURL = [YTIFormatStream videoShareURL];
         [self.delegate copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
 }
 - (NSString *)currentTimeString {
     if ([self respondsToSelector:@selector(currentTimeLabel)]) {
-        return [self currentTimeLabel].text;
+        return [YTInlinePlayerBarContainerView currentTimeLabel].text;
     }
     return nil;
 }
@@ -106,7 +106,14 @@ static UIImage *timestampImage(NSString *qualityLabel) {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     [pasteboard setString:url.absoluteString];
     
-    // you can display a success message or alert about the timestamp here
+    id message = [YTHUDMessage messageWithText:@"Successfully copied URL with Timestamp"];
+    
+    id action = [GOOHUDMessageAction new];
+    [action setTitle:@"Dismiss"];
+    [message setAction:action];
+    
+    id hudManager = [GOOHUDManagerInternal sharedInstance];
+    [hudManager showMessageMainThread:message];
 }
 
 %end
@@ -137,7 +144,7 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 - (void)didPressYouTimeStamp:(id)arg {
     NSString *currentTime = self.currentTimeLabel.text;
     if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = [self videoShareURL];
+        NSString *videoShareURL = [YTIFormatStream videoShareURL];
         [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
     [self.timestampButton setImage:timestampImage(@"2") forState:0];
