@@ -19,7 +19,6 @@
 @end
 
 @interface YTInlinePlayerBarContainerView (YouTimeStamp)
-@property (nonatomic, strong, readwrite) YTLabel *currentTimeLabel;
 @property (retain, nonatomic) YTQTMButton *timestampButton;
 - (void)didPressYouTimeStamp:(id)arg;
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
