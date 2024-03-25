@@ -111,15 +111,7 @@ static UIImage *timestampImage(NSString *qualityLabel) {
     
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     [pasteboard setString:url.absoluteString];
-    
-    id message = [YTHUDMessage messageWithText:@"Successfully copied URL with Timestamp"];
-    
-    id action = [GOOHUDMessageAction new];
-    [action setTitle:@"Dismiss"];
-    [message setAction:action];
-    
-    id hudManager = [GOOHUDManagerInternal sharedInstance];
-    [hudManager showMessageMainThread:message];
+    [[%c(GOOHUDManagerInternal) sharedInstance] showMessageMainThread:[%c(YTHUDMessage) messageWithText:@"Successfully copied URL with Timestamp"]];
 }
 
 %end
