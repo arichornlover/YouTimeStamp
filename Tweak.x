@@ -16,8 +16,8 @@
 - (void)didPressYouTimeStamp:(id)arg;
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
 - (NSInteger)timeToSeconds:(NSString *)timeString;
-@property (nonatomic, strong) YTLabel *currentTimeLabel; // YTInlinePlayerBarContainerView
-@property (nonatomic, copy) NSString *videoShareURL; // YTIShareVideoEndpoint
+// @property (nonatomic, strong) YTLabel *currentTimeLabel; // YTInlinePlayerBarContainerView
+// @property (nonatomic, copy) NSString *videoShareURL; // YTIShareVideoEndpoint
 @end
 
 @interface YTInlinePlayerBarContainerView (YouTimeStamp)
@@ -25,8 +25,8 @@
 - (void)didPressYouTimeStamp:(id)arg;
 - (void)copyModifiedURLToClipboard:(NSString *)originalURL withTime:(NSString *)timeString;
 - (NSInteger)timeToSeconds:(NSString *)timeString;
-@property (nonatomic, strong) YTLabel *currentTimeLabel; // YTInlinePlayerBarContainerView
-@property (nonatomic, copy) NSString *videoShareURL; // YTIShareVideoEndpoint
+// @property (nonatomic, strong) YTLabel *currentTimeLabel; // YTInlinePlayerBarContainerView
+// @property (nonatomic, copy) NSString *videoShareURL; // YTIShareVideoEndpoint
 @end
 
 // For displaying snackbars - @theRealfoxster
@@ -60,7 +60,7 @@ NSBundle *YouTimeStampBundle() {
 }
 
 static UIImage *timestampImage(NSString *qualityLabel) {
-    return [%c(QTMIcon) tintImage:[UIImage imageNamed:[NSString stringWithFormat:@"Timestamp@%@", qualityLabel] inBundle: YouTimeStampBundle() compatibleWithTraitCollection:nil] color:[%c(YTColor) white1]];
+    return [%c(QTMIcon) tintImage:[UIImage imageNamed:[NSString stringWithFormat:@"Timestamp@3", qualityLabel] inBundle: YouTimeStampBundle() compatibleWithTraitCollection:nil] color:[%c(YTColor) white1]];
 }
 
 %group Top
@@ -91,12 +91,13 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = self.currentTimeLabel.text;
-    if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = self.videoShareURL;
+    NSString *currentTime = self.currentTimeString;
+    NSString *videoShareURL = self.videoShareURL;
+    
+    if (currentTime && videoShareURL) {
         [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
-    [self.timestampButton setImage:timestampImage(@"2") forState:0];
+    [self.timestampButton setImage:timestampImage@2 forState:UIControlStateNormal];
 }
 - (NSString *)currentTimeString {
     if (self.currentTimeLabel) {
@@ -140,12 +141,13 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = self.currentTimeLabel.text;
-    if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
-        NSString *videoShareURL = self.videoShareURL;
+    NSString *currentTime = self.currentTimeString;
+    NSString *videoShareURL = self.videoShareURL;
+    
+    if (currentTime && videoShareURL) {
         [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
     }
-    [self.timestampButton setImage:timestampImage(@"2") forState:0];
+    [self.timestampButton setImage:timestampImage@2 forState:UIControlStateNormal];
 }
 - (NSString *)currentTimeString {
     if (self.currentTimeLabel) {
