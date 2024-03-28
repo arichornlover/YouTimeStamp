@@ -91,13 +91,17 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = self.currentTimeString;
-    NSString *videoShareURL = self.videoShareURL;
-    
-    if (currentTime && videoShareURL) {
-        [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
+    if ([self respondsToSelector:@selector(currentTimeLabel)]) {
+        NSString *currentTime = self.currentTimeLabel.text;
+        if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
+            NSString *videoShareURL = self.videoShareURL;
+            [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
+        }
+        [self.timestampButton setImage:timestampImage(@"2") forState:0];
+    } else {
+        // Handle unrecognized selector error gracefully
+        NSLog(@"currentTimeLabel is not available");
     }
-    [self.timestampButton setImage:timestampImage@2 forState:UIControlStateNormal];
 }
 - (NSString *)currentTimeString {
     if (self.currentTimeLabel) {
@@ -141,13 +145,17 @@ static UIImage *timestampImage(NSString *qualityLabel) {
 
 %new(v@:@)
 - (void)didPressYouTimeStamp:(id)arg {
-    NSString *currentTime = self.currentTimeString;
-    NSString *videoShareURL = self.videoShareURL;
-    
-    if (currentTime && videoShareURL) {
-        [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
+    if ([self respondsToSelector:@selector(currentTimeLabel)]) {
+        NSString *currentTime = self.currentTimeLabel.text;
+        if (currentTime && [self respondsToSelector:@selector(videoShareURL)]) {
+            NSString *videoShareURL = self.videoShareURL;
+            [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
+        }
+        [self.timestampButton setImage:timestampImage(@"2") forState:0];
+    } else {
+        // Handle unrecognized selector error gracefully
+        NSLog(@"currentTimeLabel is not available");
     }
-    [self.timestampButton setImage:timestampImage@2 forState:UIControlStateNormal];
 }
 - (NSString *)currentTimeString {
     if (self.currentTimeLabel) {
