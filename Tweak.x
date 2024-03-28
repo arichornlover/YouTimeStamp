@@ -62,9 +62,6 @@ NSBundle *YouTimeStampBundle() {
 static UIImage *timestampImage(NSString *qualityLabel) {
     return [%c(QTMIcon) tintImage:[UIImage imageNamed:[NSString stringWithFormat:@"Timestamp(@"3")", qualityLabel] inBundle: YouTimeStampBundle() compatibleWithTraitCollection:nil] color:[%c(YTColor) white1]];
 }
-static UIImage *timestampImage2(NSString *qualityLabel) {
-    return [%c(QTMIcon) tintImage:[UIImage imageNamed:[NSString stringWithFormat:@"Timestamp(@"2")", qualityLabel] inBundle: YouTimeStampBundle() compatibleWithTraitCollection:nil] color:[%c(YTColor) white1]];
-}
 
 %group Top
 
@@ -100,7 +97,7 @@ static UIImage *timestampImage2(NSString *qualityLabel) {
             NSString *videoShareURL = self.videoShareURL;
             [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
         }
-        [self.timestampButton setImage:timestampImage(@"2") forState:0];
+        [self.timestampButton setImage:timestampImage(@"3") forState:0];
     } else {
         // Handle unrecognized selector error gracefully
         NSLog(@"currentTimeLabel is not available");
@@ -154,7 +151,7 @@ static UIImage *timestampImage2(NSString *qualityLabel) {
             NSString *videoShareURL = self.videoShareURL;
             [self copyModifiedURLToClipboard:videoShareURL withTime:currentTime];
         }
-        [self.timestampButton setImage:timestampImage(@"2") forState:0];
+        [self.timestampButton setImage:timestampImage(@"3") forState:0];
     } else {
         // Handle unrecognized selector error gracefully
         NSLog(@"currentTimeLabel is not available");
